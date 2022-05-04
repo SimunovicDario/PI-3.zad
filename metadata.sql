@@ -1,4 +1,14 @@
-﻿CREATE TABLE tipTablica (
+﻿use AdventureWorksDW2019
+
+DROP TABLE IF EXISTS tabAtributAgrFun 
+DROP TABLE IF EXISTS dimCinj 
+DROP TABLE IF EXISTS tabAtribut 
+DROP TABLE IF EXISTS tipAtrib 
+DROP TABLE IF EXISTS tablica 
+DROP TABLE IF EXISTS tipTablica 
+DROP TABLE IF EXISTS agrFun 
+
+CREATE TABLE tipTablica (
     sifTipTablica TINYINT CONSTRAINT pkTipTablica PRIMARY KEY 
   , nazTipTablica CHAR(30) NOT NULL  
 )
@@ -77,14 +87,14 @@ INSERT INTO tablica (nazTablica, nazSQLTablica, sifTipTablica)
 SELECT name, name, 1
   FROM sysobjects
  WHERE xtype = 'u'
-   AND name LIKE 'c%' -- za AdventureWorks staviti LIKE 'Fact%'
+   AND name LIKE 'Fact%' -- za AdventureWorks staviti LIKE 'Fact%'
 
 
 INSERT INTO tablica (nazTablica, nazSQLTablica, sifTipTablica) 
 SELECT name, name, 2
   FROM sysobjects
  WHERE xtype = 'u'
-   AND name LIKE 'd%' -- za AdventureWorks staviti LIKE 'Dim%'
+   AND name LIKE 'Dim%' -- za AdventureWorks staviti LIKE 'Dim%'
    AND name <> 'dimCinj' 
 
 -- Prepisuje podatke o SVIM atributima u naše tablice
@@ -101,7 +111,7 @@ SELECT (SELECT sifTablica FROM tablica WHERE nazSQLTablica =  t.name)
   FROM sysobjects t, syscolumns c
   WHERE t.id = c.id
     AND t.xtype = 'u'
-    AND t.name LIKE 'd%' -- za AdventureWorks staviti LIKE 'Dim%'
+    AND t.name LIKE 'Dim%' -- za AdventureWorks staviti LIKE 'Dim%'
     AND t.name <> 'dimCinj'
   ORDER BY 1, 2
   
@@ -140,9 +150,9 @@ SELECT (SELECT sifTablica FROM tablica WHERE nazSQLTablica =  t.name)
   FROM sysobjects t, syscolumns c
  WHERE t.id = c.id
    AND t.xtype = 'u'
-   AND t.name LIKE 'c%'   -- za AdventureWorks staviti LIKE 'Fact%'
+   AND t.name LIKE 'Fact%'   -- za AdventureWorks staviti LIKE 'Fact%'
    AND t.name <> 'dimCinj'
-   AND c.name NOT LIKE '%ID%' -- za AdventureWorks staviti NOT LIKE '%Key'
+   AND c.name NOT LIKE '%Key' -- za AdventureWorks staviti NOT LIKE '%Key'
 
 UNION 
 
@@ -155,9 +165,9 @@ SELECT (SELECT sifTablica FROM tablica WHERE nazSQLTablica =  t.name)
   FROM sysobjects t, syscolumns c
  WHERE t.id = c.id
    AND t.xtype = 'u'
-   AND t.name LIKE 'c%'   -- za AdventureWorks staviti LIKE 'Fact%'
+   AND t.name LIKE 'Fact%'   -- za AdventureWorks staviti LIKE 'Fact%'
    AND t.name <> 'dimCinj'
-   AND c.name LIKE '%ID%' -- za AdventureWorks staviti LIKE '%Key'
+   AND c.name LIKE '%Key' -- za AdventureWorks staviti LIKE '%Key'
 
  ORDER BY 1, 2
 
@@ -185,7 +195,7 @@ INSERT INTO dimCinj
    AND t1.id = c1.id
    AND fk.rkey   = c2.colid
    AND t2.id = c2.id
-   AND t1.name LIKE 'c%' -- za AdventureWorks staviti LIKE 'Fact%'
+   AND t1.name LIKE 'Fact%' -- za AdventureWorks staviti LIKE 'Fact%'
 
  ORDER BY 1, 2
  
@@ -269,13 +279,3 @@ SELECT   dimTablica.nazTablica
  ORDER BY dimTablica.nazTablica, rbrAtrib
  
  
- 
-
-  --- DROP TABLES:
--- DROP  TABLE tabAtributAgrFun 
--- DROP  TABLE dimCinj 
--- DROP  TABLE tabAtribut 
--- DROP  TABLE tipAtrib 
--- DROP  TABLE tablica 
--- DROP  TABLE tipTablica 
--- DROP  TABLE agrFun 

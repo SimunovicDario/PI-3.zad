@@ -1,0 +1,102 @@
+<app-login (loggedIn)="login()" *ngIf="!loggedIn"></app-login>
+<div class="row" style="box-sizing: border-box; " *ngIf="loggedIn">
+  <div class="col" [ngClass]="expanded['sidemenu'] ? '' : 'fadeout'" style="width:30%; height: 100vh; overflow:auto;">
+    <div class="rounded-border" style="margin-top: 0.2rem; margin-left: 0.2rem"
+      [ngStyle]="{'border-bottom': expanded['factTables'] ? '' : '0'}">
+      <div class="menu head flex" (click)="expanded['factTables'] = !expanded['factTables']">
+        <button style="width:1.3rem; padding:0; margin-left: 0.25rem; margin-right: 0.25rem;" id="factTables"
+          name="factTables"
+          (click)="expanded['factTables'] = !expanded['factTables'];$event.stopPropagation();">{{expanded['factTables']
+          ? '-' :
+          '+'}}</button>
+        <label for="factTables" (click)="$event.stopPropagation()">Fact tables</label>
+        <button style="margin-left: auto; margin-right: 0;" (click)="logout()">Logout</button>
+      </div>
+      <div [ngClass]="expanded['factTables'] ? '' : 'collapsed'">
+        <div *ngFor="let row of factTables" class="wrap flex ml24 item">
+          <input type="radio" [checked]="row.sifTablica===factTables[0].sifTablica" (click)="setFactTable(row)"
+            [id]="'in'+row.sifTablica" name="factTables" [value]="row.sifTablica" />
+          <label [for]="'in'+row.sifTablica">{{row.nazTablica}}</label>
+        </div>
+      </div>
+    </div>
+    <div id="tree" *ngIf="tree" class="w1">
+      <div *ngIf="tree.measures" class="rounded-border" style="margin-left: 0.2rem"
+        [ngStyle]="{'border-bottom': expanded['measures'] ? '' : '0'}">
+        <div class="menu head" (click)="expanded['measures'] = !expanded['measures']">
+          <button style="width:1.3rem; padding:0; margin-left: 0.25rem; margin-right: 0.25rem;" id="measures"
+            (click)="expanded['measures'] = !expanded['measures'];$event.stopPropagation();">{{expanded['measures'] ?
+            '-' :
+            '+'}}</button>
+          <label for="measures" (click)="$event.stopPropagation()">Measures</label>
+        </div>
+        <div [ngClass]="expanded['measures'] ? 'ml5' : 'collapsed'">
+          <div *ngFor="let row of tree.measures" style="display:flex;" class="item">
+            <span class="flex">
+              <img src="assets/measure.png">
+              <input type="checkbox" (click)="setMeasure(row)" [name]="row.Column14" [id]="row.Column14"
+                [value]="row.Column14" />
+            </span>
+            <label [for]="row.Column14" class="wrap">{{row.Column14}}</label>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="tree.dimensions" class="rounded-border" style="margin-left: 0.2rem"
+        [ngStyle]="{'border-bottom': expanded['dimensions'] ? '' : '0'}">
+        <div class="menu head" (click)="expanded['dimensions'] = !expanded['dimensions']">
+          <button style="width:1.3rem; padding:0; margin-left: 0.25rem; margin-right: 0.25rem;" id="dimensions"
+            (click)="expanded['dimensions'] = !expanded['dimensions']; $event.stopPropagation()">{{expanded['dimensions']
+            ? '-' :
+            '+'}}</button>
+          <!-- <input type="checkbox" [(ngModel)]="expanded['dimensions']" name="InDimension" id="InDimension" /> -->
+          <label for="dimensions" (click)="$event.stopPropagation()">Dimensions</label>
+        </div>
+        <div [ngClass]="expanded['dimensions'] ? 'ml5' : 'collapsed'">
+          <div *ngFor="let item of tree.dimensions|keyvalue" style="padding: 0.2rem 0 0.2rem 0.2rem;">
+            <div class="wrap flex menu item" (click)="expanded[$any(item).key] = !expanded[$any(item).key]"
+              style="border: 2px solid black; border-right: 0; border-radius: 5px 0 0 5px;">
+              <img src="assets/dimension.png">
+              <button style="width:1.3rem; padding:0; margin-left: 0.25rem; margin-right: 0.25rem;"
+                [id]="$any(item).key"
+                (click)="expanded[$any(item).key] = !expanded[$any(item).key]; $event.stopPropagation()">{{expanded[$any(item).key]
+                ? '-' :
+                '+'}}</button>
+              <!-- <input type="checkbox" [(ngModel)]="expanded[$any(item).key]" [name]="$any(item).key" [id]="$any(item).key" /> -->
+              <label [for]="$any(item).key" (click)="$event.stopPropagation()">{{item.key}}</label>
+            </div>
+            <div [ngClass]="expanded[$any(item).key] ? 'ml5' : 'collapsed'">
+              <div *ngFor="let row of $any(item).value" class="flex item">
+                <span class="flex">
+                  <img src="assets/sheet.png" />
+                  <input type="checkbox" (click)="setDimension($any(item).key, row)" [name]="row.imeAtrib"
+                    [id]="row.imeAtrib" [value]="row.imeAtrib" />
+                </span>
+                <label [for]="row.imeAtrib" class="wrap">{{row.imeAtrib}}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col" style="width: 70vw;">
+    <div>
+      <div class="row" style="margin: 0.2rem 0.2rem 0 0.2rem;min-height: 10vh; max-height:20vh; 
+        overflow: auto; border: 2px solid black; border-radius: 5px 5px 0 0;">
+        <div id="sql" style="width:100%; margin:0.5rem;" [innerHTML]="sqlHTML" editable></div>
+      </div>
+      <div class="row"
+        style="margin: 0 0.2rem 0.2rem 0.2rem;border: 2px solid black; border-top: 0;  border-radius: 0 0 5px 5px;">
+        <button style="height:2rem; border-radius: 0 0 0 5px;" (click)="executeSQL()">Start</button>
+      </div>
+    </div>
+    <div class="row"
+      style="max-height: 73vh; height:73vh; margin: 0 0.2rem 0.2rem 0.2rem; border: 2px solid black; border-radius: 5px;"
+      *ngIf="error || data">
+      <ngx-table style="width: 100vw; overflow: auto;" [configuration]="configuration" [data]="data" *ngIf="!error"
+        [columns]="columns">
+      </ngx-table>
+      <div *ngIf="error">{{error}}</div>
+    </div>
+  </div>
+</div>

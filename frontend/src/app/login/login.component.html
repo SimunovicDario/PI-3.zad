@@ -1,0 +1,43 @@
+<div style="height:100%; display: flex;align-items: center;text-align: center;
+            justify-content: center; display: flex; flex-direction: column;">
+    <div
+        style="width: 45%;height: 45%;border: 2px solid black;border-radius: 5px; overflow: auto; display: flex; flex-direction: column;">
+        <div style="border-bottom: 2px solid black;text-align: center; 
+            height: 2rem; justify-content: center; align-items: center; display:flex;
+            background-color: #659E91; border-radius: 5px 5px;">
+            Welcome!
+        </div>
+        <div style="margin: 1rem; display:flex; flex-direction: column;">
+            <div class="row">
+                <label for="server">Server:</label>
+                <input name="server" id="server" placeholder="localhost" [(ngModel)]="server" />
+            </div>
+            <div class="row">
+                <label for="db">Database:</label>
+                <input name="db" id="db" [(ngModel)]="database" placeholder="AdventureWorksDW2019" />
+            </div>
+        </div>
+        <div style="width: 80%; margin-left:auto; margin-right:auto; height: 1px; border-bottom: 1px solid black;">
+        </div>
+        <div style="margin: 1rem; display:flex; flex-direction: column;">
+            <select style="width: 100%; margin: 0.5rem 0 0.5rem 0;" [(ngModel)]="type">
+                <option value="SQL">SQL authentication</option>
+                <option value="Windows" selected>Windows authentication</option>
+            </select>
+            <div *ngIf="type==='SQL'">
+                <div class="row">
+                    <label for="name">User name:</label>
+                    <input name="name" id="name" [(ngModel)]="username" />
+                </div>
+                <div class="row">
+                    <label for="password">Password:</label>
+                    <input type="password" name="password" id="password" [(ngModel)]="password" />
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-top:auto; margin-bottom: 1rem; justify-content: center;">
+            <button style="margin-right: 0.25rem;" (click)="reset()">Reset</button>
+            <button style="margin-left: 0.25rem;" (click)="login()" [disabled]="">Login</button>
+        </div>
+    </div>
+</div>
