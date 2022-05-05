@@ -93,11 +93,12 @@ export class HomeComponent implements OnInit {
     this.columnsStorage = [];
     for (let key of Object.keys(this.checked.dimensions)) {
       let value = this.checked.dimensions[key];
-      from += "<br/>&emsp;&emsp;&ensp;, " + key
+      const firstDim: any = Object.values(value)[0];
+      from += "<br/>&emsp;&emsp;&ensp;, " + firstDim.nazSqlDimTablica
       for (let val of Object.values(value)) {
         let row: any = val;
         !select ? select += "SELECT " : select += "<br/>&emsp;&emsp;&emsp;&ensp;, "
-        select += key + "." + row.imeSQLAtrib + " AS '" + row.imeAtrib + "'"
+        select += row.nazSqlDimTablica + "." + row.imeSQLAtrib + " AS '" + row.imeAtrib + "'"
         this.columnsStorage.push({ key: row.imeAtrib, title: row.imeAtrib })
         console.log(row)
         whereSet.add(row.nazSqlCinjTablica + '.' + row.cinjTabKljuc + ' = ' + row.nazSqlDimTablica + '.' + row.dimTabKljuc)

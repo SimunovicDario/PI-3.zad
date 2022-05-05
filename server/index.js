@@ -176,11 +176,9 @@ app.post('/login', async (req, res) => {
         else
             connectionString += ";Uid=" + username + ";Pwd=" + password;
         connectionString += ";Driver={SQL Server Native Client 11.0}";
-        console.log(connectionString)
         await tryConnect();
         res.send(null);
     } catch (err) {
-        console.log(err[1].message)
         const msg = err[1].message ? err[1].message.split("]") : err.message.split("]");
         res.status(400).send(msg[msg.length - 1])
     }

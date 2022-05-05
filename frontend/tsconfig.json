@@ -5,7 +5,7 @@
     "baseUrl": "./",
     "outDir": "../../server/dist",
     "forceConsistentCasingInFileNames": true,
-    "strict": true,
+    "strict": false,
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
@@ -19,6 +19,7 @@
     "target": "es2017",
     "module": "es2020",
     "strictPropertyInitialization": false,
+    "useUnknownInCatchVariables": false,
     "lib": [
       "es2020",
       "dom",
